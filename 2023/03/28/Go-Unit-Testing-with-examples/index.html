@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha256-/4UQcSmErDzPCMAiuOiWPVVsNN2s3ZY/NsmXNcj0IFc=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"fibo.dev","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.15.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Unit testing is a key aspect of software development that helps ensure the correctness and reliability of the code. In Go, the process of unit testing is relatively straightforward, but it requires a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go Unit Testing with examples">
+<meta property="og:url" content="https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/index.html">
+<meta property="og:site_name" content="Fibo">
+<meta property="og:description" content="Unit testing is a key aspect of software development that helps ensure the correctness and reliability of the code. In Go, the process of unit testing is relatively straightforward, but it requires a">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-03-28T01:50:37.000Z">
+<meta property="article:modified_time" content="2023-03-28T02:19:49.298Z">
+<meta property="article:author" content="Fibo">
+<meta property="article:tag" content="Go">
+<meta property="article:tag" content="Unit Testing">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/","path":"2023/03/28/Go-Unit-Testing-with-examples/","title":"Go Unit Testing with examples"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Go Unit Testing with examples | Fibo</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Fibo</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Welcome to my Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">2</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">1</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Writing-Unit-Tests-in-Go"><span class="nav-number">1.</span> <span class="nav-text">Writing Unit Tests in Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Running-Unit-Tests-in-Go"><span class="nav-number">2.</span> <span class="nav-text">Running Unit Tests in Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Analyzing-Test-Coverage-in-Go"><span class="nav-number">3.</span> <span class="nav-text">Analyzing Test Coverage in Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Practical-Examples"><span class="nav-number">4.</span> <span class="nav-text">Practical Examples</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Testing-an-HTTP-handler"><span class="nav-number">4.1.</span> <span class="nav-text">Testing an HTTP handler</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Testing-a-database-function"><span class="nav-number">4.2.</span> <span class="nav-text">Testing a database function</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Fibo</p>
+  <div class="site-description" itemprop="description">fibo.dev</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Fibo">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Fibo">
+      <meta itemprop="description" content="fibo.dev">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Go Unit Testing with examples | Fibo">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go Unit Testing with examples
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-03-28 09:50:37 / Modified: 10:19:49" itemprop="dateCreated datePublished" datetime="2023-03-28T09:50:37+08:00">2023-03-28</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="Word count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Word count in article: </span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>4 mins.</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Unit testing is a key aspect of software development that helps ensure the correctness and reliability of the code. In Go, the process of unit testing is relatively straightforward, but it requires a little bit of planning and effort.</p>
+<span id="more"></span>
+<p>In this article, we’ll cover the basics of unit testing in Go, including how to write unit tests, run them, and interpret the results. We’ll also provide some practical examples of how to apply unit testing to real-world scenarios.</p>
+<h3 id="Writing-Unit-Tests-in-Go"><a href="#Writing-Unit-Tests-in-Go" class="headerlink" title="Writing Unit Tests in Go"></a>Writing Unit Tests in Go</h3><p>The first step in writing a unit test is to create a new file with the suffix <code>_test.go</code> in the same package as the code being tested. For example, if you’re testing a package called math, you would create a file named math_test.go in the same directory as the math package.</p>
+<p>Once you’ve created the test file, you need to import the testing package and define a function with the signature <code>func TestXxx(t *testing.T)</code>. The function name should start with Test and be followed by a descriptive name that indicates what the test is testing. For example, if you’re testing a function named Add, you might define a test function called <code>TestAdd</code>.</p>
+<p>Here’s an example of a simple unit testing:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestAdd</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    result := Add(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> result != <span class="number">5</span> &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;Add(2, 3) = %d, expected 5&quot;</span>, result)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>In this example, we’re testing the Add function, which takes two integers and returns their sum. We call Add with the arguments <code>2</code> and <code>3</code>, and then compare the result to the expected value of <code>5</code>. If the result is not equal to <code>5</code>, we use the <code>t.Errorf</code> function to report an error.</p>
+<h3 id="Running-Unit-Tests-in-Go"><a href="#Running-Unit-Tests-in-Go" class="headerlink" title="Running Unit Tests in Go"></a>Running Unit Tests in Go</h3><p>To run all the unit tests in a package, you can use the go test command followed by the package name. For example, to run all the tests in the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run all the unit tests defined in the <code>math</code> package and display the results. By default,<code>go test</code> prints a summary of the test results, indicating how many tests passed and how many failed. You can also use the <code>-v</code> flag to get more detailed output, including the name of each test function and its result.</p>
+<p>If you want to run a specific test function, you can use the<code> -run</code> flag followed by a regular expression that matches the name of the test function. For example, to run the <code>TestAdd</code> function in the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> -run TestAdd math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run only the <code>TestAdd</code> function in the math package and display the results.</p>
+<h3 id="Analyzing-Test-Coverage-in-Go"><a href="#Analyzing-Test-Coverage-in-Go" class="headerlink" title="Analyzing Test Coverage in Go"></a>Analyzing Test Coverage in Go</h3><p>Test coverage is a metric that measures how much of the code is exercised by the unit tests. In Go, you can use the <code>-cover</code> flag with the go test command to generate a coverage report.</p>
+<p>To generate a coverage report for the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> -cover math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run all the unit tests in the math package and display the results, including the percentage of code covered by the tests.</p>
+<p>Here’s an example of a coverage report:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ok math 0.001s coverage: 100.0%</span><br></pre></td></tr></table></figure>
+
+<p>Let’s dive deeper into writing more complex unit tests with practical examples.</p>
+<h3 id="Practical-Examples"><a href="#Practical-Examples" class="headerlink" title="Practical Examples"></a>Practical Examples</h3><h4 id="Testing-an-HTTP-handler"><a href="#Testing-an-HTTP-handler" class="headerlink" title="Testing an HTTP handler"></a>Testing an HTTP handler</h4><p>In this example, we’ll create a simple HTTP server that serves a single endpoint and write a unit test for the endpoint handler. We’ll use the built-in <code>net/http/httptest</code> package to create a test server and send HTTP requests to it.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http/httptest&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestHandler</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    req, err := http.NewRequest(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;/&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    rr := httptest.NewRecorder()</span><br><span class="line">    handler := http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        w.WriteHeader(http.StatusOK)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    handler.ServeHTTP(rr, req)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> status := rr.Code; status != http.StatusOK &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;handler returned wrong status code: got %v want %v&quot;</span>,</span><br><span class="line">            status, http.StatusOK)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    expected := <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> rr.Body.String() != expected &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;handler returned unexpected body: got %v want %v&quot;</span>,</span><br><span class="line">            rr.Body.String(), expected)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this example, we create a new HTTP request for the root endpoint <code>(&quot;/&quot;)</code> and use the <code>httptest.NewRecorder</code> function to create a new <code>ResponseRecorder</code> to capture the response from the server.</p>
+<p>We then define a simple HTTP handler function that always returns a status code of <code>200</code>. We call this handler function with the <code>ServeHTTP</code> method of the <code>http.Handler</code> interface, passing in the <code>ResponseRecorder</code> and <code>Request</code> objects.</p>
+<p>Finally, we use the <code>Code</code> and <code>Body</code> methods of the <code>ResponseRecorder</code> object to check the status code and body of the response, and report any errors using the <code>t.Errorf</code> function.</p>
+<h4 id="Testing-a-database-function"><a href="#Testing-a-database-function" class="headerlink" title="Testing a database function"></a>Testing a database function</h4><p>In this example, we’ll create a function that interacts with a database and write a unit test for it. We’ll use the built-in <code>testing/quick</code> package to generate random input values for the function.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;database/sql&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">    <span class="string">&quot;testing/quick&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetUserName</span><span class="params">(db *sql.DB, id <span class="type">int</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> name <span class="type">string</span></span><br><span class="line">    err := db.QueryRow(<span class="string">&quot;SELECT name FROM users WHERE id=?&quot;</span>, id).Scan(&amp;name)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> name, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGetUserName</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    db, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;user:password@/dbname&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> db.Close()</span><br><span class="line"></span><br><span class="line">    f := <span class="function"><span class="keyword">func</span><span class="params">(id <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">        name, err := GetUserName(db, id)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            t.Error(err)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> name == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">            t.Errorf(<span class="string">&quot;empty name for id=%d&quot;</span>, id)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> err := quick.Check(f, <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Error(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this example, we define a function called <code>GetUserName</code> that takes a database connection and an <code>ID</code>, and returns the name of the user with that <code>ID</code>. We use the QueryRow method of the <code>sql.DB</code> object to execute a SQL query and retrieve the name from the result.</p>
+<p>We also define a unit test function called <code>TestGetUserName</code> that uses the <code>testing/quick</code> package to generate random input values for the <code>GetUserName</code> function. We pass in a function f that takes an <code>ID</code> and returns a boolean</p>
+<hr>
+<p>In conclusion, unit testing in Golang is a critical component of writing robust and reliable software applications. It helps developers ensure that their code is functioning correctly, identify bugs and errors before they cause issues in production, and maintain code quality and stability over time.</p>
+<p>In the practical examples discussed, we showed how to test an HTTP handler and a database function, demonstrating how unit testing can be used to validate different aspects of a software system.</p>
+<p>Overall, Golang’s built-in testing framework provides developers with the tools they need to create comprehensive and effective unit tests quickly and efficiently. By following best practices for unit testing and writing tests that cover all aspects of their code, developers can be confident that their software is of high quality and meets their users’ needs.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>Post author:  </strong>Fibo
+  </li>
+  <li class="post-copyright-link">
+      <strong>Post link: </strong>
+      <a href="https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/" title="Go Unit Testing with examples">https://fibo.dev/2023/03/28/Go-Unit-Testing-with-examples/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+              <a href="/tags/Unit-Testing/" rel="tag"><i class="fa fa-tag"></i> Unit Testing</a>
+          </div>
+
+        
+
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Fibo</span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

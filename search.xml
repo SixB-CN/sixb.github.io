@@ -1,42 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>HTTP路由</title>
-    <url>/2023/03/14/http-router/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>后端开发</category>
-      </categories>
+    <title>Go Unit Testing with examples</title>
+    <url>/2023/03/28/Go-Unit-Testing-with-examples/</url>
+    <content><![CDATA[<p>Unit testing is a key aspect of software development that helps ensure the correctness and reliability of the code. In Go, the process of unit testing is relatively straightforward, but it requires a little bit of planning and effort.</p>
+<span id="more"></span>
+<p>In this article, we’ll cover the basics of unit testing in Go, including how to write unit tests, run them, and interpret the results. We’ll also provide some practical examples of how to apply unit testing to real-world scenarios.</p>
+<h3 id="Writing-Unit-Tests-in-Go"><a href="#Writing-Unit-Tests-in-Go" class="headerlink" title="Writing Unit Tests in Go"></a>Writing Unit Tests in Go</h3><p>The first step in writing a unit test is to create a new file with the suffix <code>_test.go</code> in the same package as the code being tested. For example, if you’re testing a package called math, you would create a file named math_test.go in the same directory as the math package.</p>
+<p>Once you’ve created the test file, you need to import the testing package and define a function with the signature <code>func TestXxx(t *testing.T)</code>. The function name should start with Test and be followed by a descriptive name that indicates what the test is testing. For example, if you’re testing a function named Add, you might define a test function called <code>TestAdd</code>.</p>
+<p>Here’s an example of a simple unit testing:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> math</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestAdd</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    result := Add(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> result != <span class="number">5</span> &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;Add(2, 3) = %d, expected 5&quot;</span>, result)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>In this example, we’re testing the Add function, which takes two integers and returns their sum. We call Add with the arguments <code>2</code> and <code>3</code>, and then compare the result to the expected value of <code>5</code>. If the result is not equal to <code>5</code>, we use the <code>t.Errorf</code> function to report an error.</p>
+<h3 id="Running-Unit-Tests-in-Go"><a href="#Running-Unit-Tests-in-Go" class="headerlink" title="Running Unit Tests in Go"></a>Running Unit Tests in Go</h3><p>To run all the unit tests in a package, you can use the go test command followed by the package name. For example, to run all the tests in the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run all the unit tests defined in the <code>math</code> package and display the results. By default,<code>go test</code> prints a summary of the test results, indicating how many tests passed and how many failed. You can also use the <code>-v</code> flag to get more detailed output, including the name of each test function and its result.</p>
+<p>If you want to run a specific test function, you can use the<code> -run</code> flag followed by a regular expression that matches the name of the test function. For example, to run the <code>TestAdd</code> function in the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> -run TestAdd math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run only the <code>TestAdd</code> function in the math package and display the results.</p>
+<h3 id="Analyzing-Test-Coverage-in-Go"><a href="#Analyzing-Test-Coverage-in-Go" class="headerlink" title="Analyzing Test Coverage in Go"></a>Analyzing Test Coverage in Go</h3><p>Test coverage is a metric that measures how much of the code is exercised by the unit tests. In Go, you can use the <code>-cover</code> flag with the go test command to generate a coverage report.</p>
+<p>To generate a coverage report for the math package, you would enter the following command:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">go <span class="built_in">test</span> -cover math</span></span><br></pre></td></tr></table></figure>
+
+<p>This will run all the unit tests in the math package and display the results, including the percentage of code covered by the tests.</p>
+<p>Here’s an example of a coverage report:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ok math 0.001s coverage: 100.0%</span><br></pre></td></tr></table></figure>
+
+<p>Let’s dive deeper into writing more complex unit tests with practical examples.</p>
+<h3 id="Practical-Examples"><a href="#Practical-Examples" class="headerlink" title="Practical Examples"></a>Practical Examples</h3><h4 id="Testing-an-HTTP-handler"><a href="#Testing-an-HTTP-handler" class="headerlink" title="Testing an HTTP handler"></a>Testing an HTTP handler</h4><p>In this example, we’ll create a simple HTTP server that serves a single endpoint and write a unit test for the endpoint handler. We’ll use the built-in <code>net/http/httptest</code> package to create a test server and send HTTP requests to it.</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http/httptest&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestHandler</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    req, err := http.NewRequest(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;/&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    rr := httptest.NewRecorder()</span><br><span class="line">    handler := http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">        w.WriteHeader(http.StatusOK)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    handler.ServeHTTP(rr, req)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> status := rr.Code; status != http.StatusOK &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;handler returned wrong status code: got %v want %v&quot;</span>,</span><br><span class="line">            status, http.StatusOK)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    expected := <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> rr.Body.String() != expected &#123;</span><br><span class="line">        t.Errorf(<span class="string">&quot;handler returned unexpected body: got %v want %v&quot;</span>,</span><br><span class="line">            rr.Body.String(), expected)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this example, we create a new HTTP request for the root endpoint <code>(&quot;/&quot;)</code> and use the <code>httptest.NewRecorder</code> function to create a new <code>ResponseRecorder</code> to capture the response from the server.</p>
+<p>We then define a simple HTTP handler function that always returns a status code of <code>200</code>. We call this handler function with the <code>ServeHTTP</code> method of the <code>http.Handler</code> interface, passing in the <code>ResponseRecorder</code> and <code>Request</code> objects.</p>
+<p>Finally, we use the <code>Code</code> and <code>Body</code> methods of the <code>ResponseRecorder</code> object to check the status code and body of the response, and report any errors using the <code>t.Errorf</code> function.</p>
+<h4 id="Testing-a-database-function"><a href="#Testing-a-database-function" class="headerlink" title="Testing a database function"></a>Testing a database function</h4><p>In this example, we’ll create a function that interacts with a database and write a unit test for it. We’ll use the built-in <code>testing/quick</code> package to generate random input values for the function.</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;database/sql&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;testing&quot;</span></span><br><span class="line">    <span class="string">&quot;testing/quick&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetUserName</span><span class="params">(db *sql.DB, id <span class="type">int</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> name <span class="type">string</span></span><br><span class="line">    err := db.QueryRow(<span class="string">&quot;SELECT name FROM users WHERE id=?&quot;</span>, id).Scan(&amp;name)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> name, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestGetUserName</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    db, err := sql.Open(<span class="string">&quot;mysql&quot;</span>, <span class="string">&quot;user:password@/dbname&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> db.Close()</span><br><span class="line"></span><br><span class="line">    f := <span class="function"><span class="keyword">func</span><span class="params">(id <span class="type">int</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">        name, err := GetUserName(db, id)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            t.Error(err)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> name == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">            t.Errorf(<span class="string">&quot;empty name for id=%d&quot;</span>, id)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> err := quick.Check(f, <span class="literal">nil</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        t.Error(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>In this example, we define a function called <code>GetUserName</code> that takes a database connection and an <code>ID</code>, and returns the name of the user with that <code>ID</code>. We use the QueryRow method of the <code>sql.DB</code> object to execute a SQL query and retrieve the name from the result.</p>
+<p>We also define a unit test function called <code>TestGetUserName</code> that uses the <code>testing/quick</code> package to generate random input values for the <code>GetUserName</code> function. We pass in a function f that takes an <code>ID</code> and returns a boolean</p>
+<hr>
+<p>In conclusion, unit testing in Golang is a critical component of writing robust and reliable software applications. It helps developers ensure that their code is functioning correctly, identify bugs and errors before they cause issues in production, and maintain code quality and stability over time.</p>
+<p>In the practical examples discussed, we showed how to test an HTTP handler and a database function, demonstrating how unit testing can be used to validate different aspects of a software system.</p>
+<p>Overall, Golang’s built-in testing framework provides developers with the tools they need to create comprehensive and effective unit tests quickly and efficiently. By following best practices for unit testing and writing tests that cover all aspects of their code, developers can be confident that their software is of high quality and meets their users’ needs.</p>
+]]></content>
       <tags>
-        <tag>压缩字典树</tag>
         <tag>Go</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务流量限制</title>
-    <url>/2023/03/14/rate-limit/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>后端开发</category>
-      </categories>
-      <tags>
-        <tag>服务限流</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>法布里斯贝拉(Fabrice Bellard)</title>
-    <url>/2023/03/15/FabriceBellard/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>计算机科学</category>
-      </categories>
-      <tags>
-        <tag>计算机科学人物</tag>
-        <tag>Fabrice Bellard</tag>
-        <tag>法布里斯贝拉</tag>
-        <tag>贝拉公式</tag>
-        <tag>FFMPEG</tag>
-        <tag>QEMU</tag>
+        <tag>Unit Testing</tag>
       </tags>
   </entry>
 </search>
